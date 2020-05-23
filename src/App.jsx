@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { configureStore, history } from './redux';
 import { Switch, Route } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
+import { CalendarPage } from './pages/Calendar';
 
 function App() {
   const store = configureStore();
@@ -15,6 +16,7 @@ function App() {
         <Body>
           <ConnectedRouter history={history}>
             <Switch>
+              <Route path="/calendar" render={CalendarPage} />
               <Route render={HomePage} />
             </Switch>
           </ConnectedRouter>
