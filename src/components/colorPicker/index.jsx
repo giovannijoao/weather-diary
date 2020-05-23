@@ -1,11 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { ColorBubble, BubblesContainer } from './styles';
 import { ThemeContext } from "styled-components";
 import { ColorContext } from '../../pages/Home/contexts/ColorContext/ColorContext';
 export const ColorPickerComponent = () => {
+    const ref = useRef();
+    const [changing, setChanging] = useState(false);
     const { bgColor, setBgColor } = useContext(ColorContext);
     const theme = useContext(ThemeContext);
-    const bubbles = Object.entries(theme.bgColors).filter(([key]) => bgColor ? bgColor === key : true).map(([key, value]) =>
-        <ColorBubble key={`bubble_color_${key}`} bgColor={value} onClick={key === bgColor ? () => setBgColor(null) : () => setBgColor(key)} />)
-    return <BubblesContainer>{bubbles}</BubblesContainer>
+    useEffect(() => {
+        const handleClickOutSide = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) setChanging(false);
+        }
+        document.addEventListener('mousedown', handleClickOutSide)
+        return () => document.removeEventListener('mousedown', handleClickOutSide)
+    }, [ref])
+
+    const bubbles = Object.entries(theme.bgColors).filter(([key]) => bgColor === key || changing).map(([key, value]) =>
+        <ColorBubble key={`bubble_color_${key}`} bgColor={value} onClick={key === bgColor ? () => setChanging(true) : () => setBgColor(key)} />)
+    return <BubblesContainer ref={ref}>{bubbles}</BubblesContainer>
 }
