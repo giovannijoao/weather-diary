@@ -16,6 +16,6 @@ export const ColorPickerComponent = () => {
     }, [ref])
 
     const bubbles = Object.entries(theme.bgColors).filter(([key]) => bgColor === key || changing).map(([key, value]) =>
-        <ColorBubble key={`bubble_color_${key}`} bgColor={value} onClick={key === bgColor ? () => setChanging(true) : () => setBgColor(key)} />)
+        <ColorBubble changing={changing} selected={bgColor === key} key={`bubble_color_${key}`} bgColor={value} onClick={key === bgColor ? () => setChanging(true) : () => setBgColor(key)} />)
     return <BubblesContainer ref={ref}>{bubbles}</BubblesContainer>
 }
