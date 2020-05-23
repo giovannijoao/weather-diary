@@ -5,8 +5,15 @@ import { Mood } from '../../components/mood';
 import { HeaderComponent } from '../../components/header';
 import { ColorContext } from './contexts/ColorContext/ColorContext';
 export const HomePage = () => {
+    const [backupColor, setBackupColor] = useState('');
     const [bgColor, setBgColor] = useState('first');
-    return <ColorContext.Provider value={{bgColor, setBgColor}}>
+    const commitColor = () => setBackupColor('');
+    const cancelColor = () => backupColor && setBgColor(backupColor);
+    const changeColor = (color) => {
+        setBackupColor(bgColor);
+        setBgColor(color);
+    }
+    return <ColorContext.Provider value={{bgColor, changeColor, commitColor, cancelColor}}>
         <Layout bgColor={bgColor} >
             <HeaderComponent />
             <DateHeaderComponent />
