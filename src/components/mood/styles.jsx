@@ -8,6 +8,7 @@ export const InputMood = styled.textarea`
     font-size: 38px;
     color: ${props => props.theme.textColors.first};
     background: transparent;
+    font-weight: bold;
 
     &:focus {
         outline: none;
@@ -16,6 +17,5 @@ export const InputMood = styled.textarea`
     &::-webkit-input-placeholder {
         mix-blend-mode: overlay;
         color: black;
-        font-weight: bold;
     }
 `
