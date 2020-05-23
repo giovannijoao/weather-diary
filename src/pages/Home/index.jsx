@@ -3,10 +3,14 @@ import { Layout } from './components/layout/styles';
 import { DateHeaderComponent } from '../../components/date';
 import { Mood } from '../../components/mood';
 import { HeaderComponent } from '../../components/header';
+import { ColorContext } from './contexts/ColorContext/ColorContext';
 export const HomePage = () => {
-    return <Layout >
-        <HeaderComponent />
-        <DateHeaderComponent />
-        <Mood />
-    </Layout>
+    const [bgColor, setBgColor] = useState('first');
+    return <ColorContext.Provider value={{bgColor, setBgColor}}>
+        <Layout bgColor={bgColor} >
+            <HeaderComponent />
+            <DateHeaderComponent />
+            <Mood />
+        </Layout>
+    </ColorContext.Provider>
 }
