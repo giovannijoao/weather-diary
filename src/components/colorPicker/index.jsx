@@ -16,7 +16,7 @@ export const ColorPickerComponent = () => {
         }
         document.addEventListener('mousedown', handleClickOutSide)
         return () => document.removeEventListener('mousedown', handleClickOutSide)
-    }, [ref])
+    }, [ref, commitColor])
 
     const bubbles = Object.entries(theme.bgColors).filter(([key]) => bgColor === key || changing).map(([key, value]) =>
         <ColorBubble changing={changing} selected={bgColor === key} key={`bubble_color_${key}`} bgColor={value} onClick={key === bgColor ? () => setChanging(true) : () => changeColor(key)} />)

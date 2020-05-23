@@ -3,6 +3,7 @@ export const BubblesContainer = styled.div`
     grid-area: bubbles-container;
     display: grid;
     grid-auto-flow: column;
+    align-items: center;
     column-gap: 16px;
 `
 const Bubble = styled.button`
@@ -33,6 +34,8 @@ export const ColorBubble = styled(Bubble)`
 `
 
 export const CancelBubble = styled(Bubble)`
+    width: 20px;
+    height: 20px;
     border: 0;
     background: #000;
     mix-blend-mode: overlay;
@@ -41,7 +44,7 @@ export const CancelBubble = styled(Bubble)`
     align-items: center;
     &:before, &:after {
         position: absolute;
-        left: 11px;
+        left: 9px;
         content: '';
         height: 12px;
         border-left: 2px solid #fff;
