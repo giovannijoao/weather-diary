@@ -6,8 +6,9 @@ export const Layout = styled.div`
     width: 100%;
     display: grid;
     padding-top: 2vh;
-    row-gap: 8px;
+    row-gap: 40px;
     grid-template:
-        "calendar" auto
-        / auto;
+        ". closeButton ." auto
+        ". calendar ." auto
+        / 5vw auto 5vw;
 `

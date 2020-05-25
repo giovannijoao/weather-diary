@@ -6,7 +6,6 @@ export const CalendarsGrid = styled.div`
     align-items: baseline;
     grid-template-columns: min-content auto;
     row-gap: 40px;
-    margin: 5vw;
 `
 
 export const MonthName = styled.h1`
