@@ -3,48 +3,64 @@ import eachDay from 'date-fns/eachDayOfInterval';
 import startOfWeek from 'date-fns/startOfWeek';
 import endOfWeek from 'date-fns/endOfWeek';
 import format from 'date-fns/format';
-import { CalendarContainer, Calendar, MonthName, WeekDay, MonthDay } from './styles';
-import { startOfMonth, endOfMonth, subDays } from 'date-fns';
+import { Calendar, MonthName, WeekDay, MonthDay, CalendarsGrid } from './styles';
+import { startOfMonth, endOfMonth, subDays, eachMonthOfInterval, startOfYear, endOfYear, isWithinInterval } from 'date-fns';
 import { addDays } from 'date-fns';
 
-const date = new Date();
-const weekDays = eachDay({ start: startOfWeek(date), end: endOfWeek(date) })
+const defaultDate = new Date();
+const weekDays = eachDay({ start: startOfWeek(defaultDate), end: endOfWeek(defaultDate) })
     .map(day => ({
         key: format(day, 'c'),
         display: format(day, 'eeeeee')
     }))
     .map((weekDay) => <WeekDay key={weekDay.key} >{weekDay.display}</WeekDay>);
 
-export const CalendarComponent = () => {
-    const today = format(new Date(), 'd');
-    const firstDay = startOfMonth(date);
-    const lastDayOfMonth = endOfMonth(date);
-    const currentMonthName = format(firstDay, 'MMMM');
-    const currentMonth = format(firstDay, 'L');
-    const monthBeginsAt = format(firstDay, 'c');
-    const monthEndsAt = format(lastDayOfMonth, 'c');
-    const monthDays = eachDay({
-        start: subDays(firstDay, 6 - (7 % monthBeginsAt)),
-        end: addDays(lastDayOfMonth, 7 - (monthEndsAt % 7))
+const getDayOfYear = (date) => format(date, 'D', { useAdditionalDayOfYearTokens: true })
+export const CalendarComponent = ({ year = false, start = new Date(), end = new Date() }) => {
+    if (year === true) {
+        start = startOfYear(new Date());
+        end = endOfYear(new Date());
+    }
+    const todayDayOfYear = getDayOfYear(new Date());
+    const calendars = eachMonthOfInterval({
+        start,
+        end
+    }).map(currentMonth => {
+        const currentMonthName = format(currentMonth, 'MMMM');
+        const firstDayOfMonth = startOfMonth(currentMonth);
+        const lastDayOfMonth = endOfMonth(currentMonth);
+        const monthBeginsAtWeekDay = parseInt(format(firstDayOfMonth, 'c'));
+        const monthEndsAtWeekDay = parseInt(format(lastDayOfMonth, 'c'));
+
+        const diffStart = (monthBeginsAtWeekDay - 1) % 7;
+        const diffEnd = 7 - monthEndsAtWeekDay;
+        const monthDays = eachDay({
+            start: subDays(firstDayOfMonth, diffStart),
+            end: addDays(lastDayOfMonth, diffEnd)
+        })
+            .map(dayDate => ({
+                display: format(dayDate, 'd'),
+                weekDay: format(dayDate, 'c'),
+                month: format(dayDate, 'L'),
+                dayOfYear: getDayOfYear(dayDate),
+                date: dayDate,
+            }))
+        return <React.Fragment key={currentMonthName}>
+            <MonthName>{currentMonthName}</MonthName>
+            <Calendar>
+                {weekDays}
+                {monthDays.map(day =>
+                    <MonthDay
+                        isToday={todayDayOfYear === day.dayOfYear}
+                        sameMonth={isWithinInterval(day.date, { start: firstDayOfMonth, end: lastDayOfMonth })}
+                        key={`${day.month}_${day.display}`}>
+                    {day.display}
+                    </MonthDay>
+                )}
+            </Calendar>
+        </React.Fragment>
     })
-        .map(day => ({
-            display: format(day, 'd'),
-            weekDay: format(day, 'c'),
-            month: format(day, 'L'),
-            dayOfYear: format(day, 'd')
-        }))
-    return <CalendarContainer>
-        <MonthName>{currentMonthName}</MonthName>
-        <Calendar>
-            {weekDays}
-            {monthDays.map(day =>
-                <MonthDay
-                    isToday={today === day.dayOfYear}
-                    sameMonth={currentMonth === day.month}
-                    key={`${day.month}_${day.display}`}>
-                {day.display}
-                </MonthDay>
-            )}
-        </Calendar>
-    </CalendarContainer>
+    return <CalendarsGrid>
+        {calendars}
+    </CalendarsGrid>;
 }

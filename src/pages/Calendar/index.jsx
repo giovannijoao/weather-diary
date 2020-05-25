@@ -4,6 +4,6 @@ import { CalendarComponent } from '../../components/calendar';
 
 export const CalendarPage = () => {
     return <Layout>
-        <CalendarComponent />
+        <CalendarComponent year={true} />
     </Layout>
 }

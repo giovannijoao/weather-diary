@@ -1,22 +1,20 @@
 import styled, { css } from "styled-components";
 
-export const CalendarContainer = styled.div`
+export const CalendarsGrid = styled.div`
     grid-area: calendar;
     display: grid;
-    grid-template:
-        ". month-name calendar-view" min-content
-        / 8px min-content auto;
-    column-gap: 8px;
+    align-items: baseline;
+    grid-template-columns: min-content auto;
+    row-gap: 40px;
+    margin: 5vw;
 `
 
 export const MonthName = styled.h1`
-    grid-area: month-name;
     font-weight: bold;
     font-size: 16px;
 `
 
 export const Calendar = styled.div`
-    grid-area: calendar-view;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 4px 8px;
@@ -32,12 +30,10 @@ const Day = styled.p`
 export const WeekDay = styled(Day)`
     font-size: 14px;
     font-weight: bold;
-    width: initial;
-    height: initial;
+    align-items: baseline;
 `
 
 export const MonthDay = styled(Day)`
-    grid-area: ${props => props.day};
     ${props => !props.sameMonth && css`
         opacity: 0.3;
     `};
